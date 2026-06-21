@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}LabExam{% endblock %} — Sistema de Gestão</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!--
+  Esta é a estrutura COMUM a toda página do sistema: barra lateral
+  de navegação + cabeçalho + área de conteúdo. Cada página filha só
+  precisa preencher o bloco "content" -- todo o resto vem "de graça"
+  herdado daqui.
+-->
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🧪</div>
+      <div class="brand-text">Lab<span>Exam</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('home') }}" class="nav-item {{ 'active' if request.endpoint == 'home' else '' }}">
+        <span class="nav-ico">⌂</span> Painel
+      </a>
+      <a href="{{ url_for('pacientes.listar') }}" class="nav-item {{ 'active' if request.blueprint == 'pacientes' else '' }}">
+        <span class="nav-ico">👤</span> Pacientes
+      </a>
+      <a href="{{ url_for('exames.listar') }}" class="nav-item {{ 'active' if request.blueprint == 'exames' else '' }}">
+        <span class="nav-ico">🧬</span> Exames
+      </a>
+      <div class="nav-item nav-item-disabled" title="Disponível em uma próxima etapa">
+        <span class="nav-ico">📅</span> Agendamentos
+        <span class="badge-soon">em breve</span>
+      </div>
+      <div class="nav-item nav-item-disabled" title="Disponível em uma próxima etapa">
+        <span class="nav-ico">📄</span> Resultados
+        <span class="badge-soon">em breve</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <small>LabExam — Degrau 1</small>
+      <small>Gestão interna · v0.1</small>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">{% block page_title %}Painel{% endblock %}</h1>
+    </header>
+
+    <main class="content">
+      <!--
+        Mensagens flash (sucesso, erro, info) aparecem aqui, em
+        QUALQUER página que herde de base.html — não precisamos
+        repetir esse bloco em cada template filho.
+      -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Pacientes{% endblock %}
+{% block page_title %}Pacientes{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Pacientes Cadastrados</h2>
+    <p>{{ pacientes|length }} paciente(s) no sistema</p>
+  </div>
+  <a href="{{ url_for('pacientes.novo') }}" class="btn btn-primary">+ Novo Paciente</a>
+</div>
+
+<div class="table-card">
+  {% if pacientes %}
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Idade</th>
+        <th>Telefone</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for paciente in pacientes %}
+      <tr>
+        <td><strong>{{ paciente.nome_completo }}</strong></td>
+        <td>{{ paciente.cpf_formatado }}</td>
+        <td>{{ paciente.idade }} anos</td>
+        <td>{{ paciente.telefone or "—" }}</td>
+        <td>
+          <div class="cell-actions">
+            <a href="{{ url_for('pacientes.editar', paciente_id=paciente.id) }}" class="btn btn-outline btn-sm">Editar</a>
+            <form action="{{ url_for('pacientes.excluir', paciente_id=paciente.id) }}" method="POST"
+                  onsubmit="return confirm('Remover o paciente {{ paciente.nome_completo }}?');" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <div class="ico">👤</div>
+    <p>Nenhum paciente cadastrado ainda.</p>
+    <a href="{{ url_for('pacientes.novo') }}" class="btn btn-primary btn-sm" style="margin-top:1rem;">Cadastrar o primeiro paciente</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

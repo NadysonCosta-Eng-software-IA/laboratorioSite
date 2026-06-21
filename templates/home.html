@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{# 
+  Esta linha acima é o que conecta este template ao "template mãe".
+  Tudo que não estiver dentro de um {% block %} aqui é ignorado —
+  o base.html já cuida da estrutura de <html>, sidebar, etc.
+#}
+
+{% block title %}Painel{% endblock %}
+{% block page_title %}Painel{% endblock %}
+
+{% block content %}
+<div class="dash-grid">
+  <div class="dash-card">
+    <div class="ico">👤</div>
+    <h3>Pacientes</h3>
+    <p>Cadastre e gerencie os pacientes do laboratório.</p>
+    <a href="{{ url_for('pacientes.listar') }}" class="btn btn-primary btn-sm">Ver pacientes</a>
+  </div>
+
+  <div class="dash-card">
+    <div class="ico">🧬</div>
+    <h3>Exames</h3>
+    <p>Catálogo de exames oferecidos, preços e instruções de preparo.</p>
+    <a href="{{ url_for('exames.listar') }}" class="btn btn-primary btn-sm">Ver exames</a>
+  </div>
+
+  <div class="dash-card" style="opacity:.6;">
+    <div class="ico">📅</div>
+    <h3>Agendamentos</h3>
+    <p>Em breve: marcação de coleta vinculando paciente e exames.</p>
+    <span class="pill pill-muted">Próxima etapa</span>
+  </div>
+
+  <div class="dash-card" style="opacity:.6;">
+    <div class="ico">📄</div>
+    <h3>Resultados / Laudos</h3>
+    <p>Em breve: emissão e consulta de laudos por paciente.</p>
+    <span class="pill pill-muted">Próxima etapa</span>
+  </div>
+</div>
+{% endblock %}

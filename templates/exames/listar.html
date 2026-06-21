@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Exames{% endblock %}
+{% block page_title %}Exames{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Catálogo de Exames</h2>
+    <p>{{ exames|length }} exame(s) cadastrado(s)</p>
+  </div>
+  <a href="{{ url_for('exames.novo') }}" class="btn btn-primary">+ Novo Exame</a>
+</div>
+
+<div class="table-card">
+  {% if exames %}
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Amostra</th>
+        <th>Prazo</th>
+        <th>Preço</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for exame in exames %}
+      <tr>
+        <td>
+          <strong>{{ exame.nome }}</strong>
+          {% if exame.exige_preparo %}
+            <div style="font-size:.74rem; color:var(--warning); margin-top:2px;">⚠ Requer preparo</div>
+          {% endif %}
+        </td>
+        <td>{{ exame.tipo_amostra }}</td>
+        <td>{{ exame.prazo_entrega_horas }}h</td>
+        <td>R$ {{ "%.2f"|format(exame.preco)|replace(".", ",") }}</td>
+        <td>
+          {% if exame.ativo %}
+            <span class="pill pill-success">Ativo</span>
+          {% else %}
+            <span class="pill pill-muted">Inativo</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="cell-actions">
+            <a href="{{ url_for('exames.editar', exame_id=exame.id) }}" class="btn btn-outline btn-sm">Editar</a>
+            <form action="{{ url_for('exames.excluir', exame_id=exame.id) }}" method="POST"
+                  onsubmit="return confirm('Remover o exame {{ exame.nome }}?');" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <div class="ico">🧬</div>
+    <p>Nenhum exame cadastrado ainda.</p>
+    <a href="{{ url_for('exames.novo') }}" class="btn btn-primary btn-sm" style="margin-top:1rem;">Cadastrar o primeiro exame</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

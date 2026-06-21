@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  {#
+    csrf_token aqui é o token de proteção contra CSRF que mencionei
+    em forms.py — o Flask-WTF cuida de gerar e validar isso. Sem essa
+    linha, o formulário seria rejeitado.
+  #}
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      {{ form.nome.label }}
+      {{ form.nome(class_="field-invalid" if form.nome.errors else "") }}
+      {% if form.nome.errors %}<div class="field-error">{{ form.nome.errors[0] }}</div>{% endif %}
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        {{ form.codigo_interno.label }}
+        {{ form.codigo_interno(class_="field-invalid" if form.codigo_interno.errors else "") }}
+        {% if form.codigo_interno.errors %}<div class="field-error">{{ form.codigo_interno.errors[0] }}</div>{% endif %}
+      </div>
+      <div class="form-group">
+        {{ form.tipo_amostra.label }}
+        {{ form.tipo_amostra() }}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        {{ form.preco.label }}
+        {{ form.preco(class_="field-invalid" if form.preco.errors else "") }}
+        {% if form.preco.errors %}<div class="field-error">{{ form.preco.errors[0] }}</div>{% endif %}
+      </div>
+      <div class="form-group">
+        {{ form.prazo_entrega_horas.label }}
+        {{ form.prazo_entrega_horas(class_="field-invalid" if form.prazo_entrega_horas.errors else "") }}
+        {% if form.prazo_entrega_horas.errors %}<div class="field-error">{{ form.prazo_entrega_horas.errors[0] }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      {{ form.instrucoes_preparo.label }}
+      {{ form.instrucoes_preparo(rows="3") }}
+      <div class="hint">Ex: "Jejum de 8 horas". Deixe em branco se o exame não exige preparo.</div>
+    </div>
+
+    <div class="form-group checkbox-row">
+      {{ form.ativo() }}
+      {{ form.ativo.label }}
+    </div>
+
+    <div class="form-actions">
+      {{ form.submit(class_="btn btn-primary") }}
+      <a href="{{ url_for('exames.listar') }}" class="btn btn-outline">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
